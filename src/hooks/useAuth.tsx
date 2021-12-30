@@ -4,6 +4,8 @@ import { generateRandom } from 'expo-auth-session/build/PKCE';
 
 import { api } from '../services/api';
 
+const { CLIENT_ID } = process.env;
+
 interface User {
   id: number;
   display_name: string;
@@ -41,7 +43,8 @@ function AuthProvider({ children }: AuthProviderData) {
   async function signIn() {
     try {
       // set isLoggingIn to true
-
+      setIsLoggingIn(true);
+        
       // REDIRECT_URI - create OAuth redirect URI using makeRedirectUri() with "useProxy" option set to true
       // RESPONSE_TYPE - set to "token"
       // SCOPE - create a space-separated list of the following scopes: "openid", "user:read:email" and "user:read:follows"
@@ -90,7 +93,7 @@ function AuthProvider({ children }: AuthProviderData) {
   }
 
   useEffect(() => {
-    // add client_id to request's "Client-Id" header
+    api.defaults.headers['Client-Id'] = CLIENT_ID;
   }, [])
 
   return (
